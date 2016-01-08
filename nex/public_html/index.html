@@ -490,7 +490,7 @@
                                                                 });
 
                                                                 $("#btnCashinoutAdd").click(function () {
-                                                                    if (customer_id == 0) {
+                                                                    if (cashinout_idd == 0) {
                                                                         $.ajax({
                                                                             type: 'POST',
                                                                             url: "php/setcashinout.php",
@@ -506,6 +506,18 @@
 
 
 
+
+
+                                                                    }else {
+                                                                        $.ajax({
+                                                                            type: 'POST',
+                                                                            url: "php/updatecashinout.php",
+                                                                            data: {cashinout_idd:cashinout_idd , type: typeid,amount:$("#cashinoutPaytype").val(),description:$("#txtCashinoutDescription").val()},
+                                                                            success: function (data) {
+                                                                                alert("Data Updated!");
+                                                                               getcashinout();
+                                                                            }
+                                                                        });
 
 
                                                                     }
@@ -604,6 +616,23 @@
                                                             }
 
                                                             function delcashid(id) {
+                                                               
+                                                                var r= confirm("Are you sure want to delete?");
+                                                                if(r==true){
+                                                                     $.ajax({
+                                                                    type: 'POST',
+                                                                    url: "php/deletecashinout.php",
+                                                                    data: {id: id},
+                                                                    success: function (data) {
+                                                                        getcashinout();
+                                                                    }
+
+                                                                });
+                                                                    
+                                                                    
+                                                                }
+                                                                
+                                                                  
 
 
 
