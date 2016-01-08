@@ -307,7 +307,7 @@
                                             </th>
 
                                         </tr>
-                                        
+
 
                                     </table>
 
@@ -456,7 +456,7 @@
                                                                 $("#tblcashinout").hide();
                                                                 $("#frmview").hide();
                                                                 $("#tblview").hide();
-                                                                
+
                                                                 $("#btnAdd").click(function () {
 
                                                                     if (customer_id == 0) {
@@ -488,8 +488,8 @@
 
                                                                     customer_id = 0;
                                                                 });
-                                                                
-                                                                   $("#btnCashinoutAdd").click(function () {
+
+                                                                $("#btnCashinoutAdd").click(function () {
                                                                     if (customer_id == 0) {
                                                                         $.ajax({
                                                                             type: 'POST',
@@ -509,11 +509,11 @@
 
 
                                                                     }
-                                                                   
+
 
 
                                                                 });
-                                                                
+
                                                             });
 
                                                             $("#btnback").click(function () {
@@ -554,8 +554,8 @@
 
                                                                 customer_id = id;
                                                             }
-                                                           
-                                                            
+
+
 
                                                             function del(id) {
 
@@ -571,18 +571,42 @@
                                                                 });
 
                                                             }
-                                                            
-                                                             
-                                                            function setcashid(id){
+
+                                                         var cashinout_idd=0;
+                                                            function setcashid(id) {
+                                                               // alert(id);
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: "php/setcashinoutupdate.php",
+                                                                    dataType: 'xml',
+                                                                    data: {id: id},
+                                                                    success: function (xml) {
+                                                                        
+                                                                       
+                                                                        $(xml).find('cashinout').each(function () {
+                                                                           
+                                                                            $("#cashinoutCustomername").val($(this).find('name').text());
+                                                                            $("#cashinoutPaytype").val($(this).find('type').text());
+                                                                            $("#txtCashinoutAmount").val($(this).find('amount').text());
+                                                                            $("#txtCashinoutDescription").val($(this).find('description').text());
+
+
+                                                                        });
+
+                                                                    }
+
+
+                                                                });
                                                                 
-                                                                
-                                                                
+                                                               cashinout_idd=id;
+
+
                                                             }
-                                                            
-                                                            function delcashid(id){
-                                                                
-                                                                
-                                                                
+
+                                                            function delcashid(id) {
+
+
+
                                                             }
 
                                                             function getcustomer() {
@@ -599,19 +623,19 @@
 
 
                                                             }
-                                                            
-                                                            function getcashinout(){
+
+                                                            function getcashinout() {
                                                                 $.ajax({
-                                                                   type: 'POST',
-                                                                   url: "php/getcushinout.php",
-                                                                   data: {},
-                                                                   success: function (data) {
-                                                                       $("#tblcashinout").html(data);
-                    }
-                                                                    
+                                                                    type: 'POST',
+                                                                    url: "php/getcushinout.php",
+                                                                    data: {},
+                                                                    success: function (data) {
+                                                                        $("#tblcashinout").html(data);
+                                                                    }
+
                                                                 });
-                                                                
-                                                                
+
+
                                                             }
 
 
@@ -643,7 +667,7 @@
                                                                 $("#frmcashinout").slideDown();
                                                                 $("#tblcashinout").slideDown();
 
-                                                             
+
 
                                                                 $.ajax({
                                                                     type: 'POST',
@@ -655,7 +679,7 @@
                                                                     }
 
                                                                 });
-                                                                
+
                                                                 getcashinout();
 
 

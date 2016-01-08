@@ -24,14 +24,26 @@ if ($db->connect_error) {
 
 $id = $_POST['id'];
 
-$sql = "SELECT * from customer where id=".$id;
+$sql = "SELECT
+cashinout.id,
+customer.`id` as cusid,
+customer.`name`,
+cashinout.paymentype,
+cashinout.amount,
+cashinout.description
+FROM
+cashinout
+INNER JOIN customer ON cashinout.customer_id = customer.id
+WHERE
+cashinout.id =".$id;
 $xml;
 foreach ($db->query($sql )as $row ){
-  $xml = "<customer>";
-  $xml .= "<name>".$row['name']."</name>";
-  $xml .= "<type>".$row['type_id'].":".$row['type']."</type>";
-  $xml .= "<contactinfo>".$row['contactinfo']."</contactinfo>";
-  $xml .= "</customer>";
+  $xml = "<cashinout>";
+  $xml .= "<name>".$row['cusid'].":".$row['name']."</name>";
+  $xml .= "<type>".$row['paymentype']."</type>";
+  $xml .= "<amount>".$row['amount']."</amount>";
+  $xml .= "<description>".$row['description']."</description>";
+  $xml .= "</cashinout>";
     
 }
 echo $xml;
