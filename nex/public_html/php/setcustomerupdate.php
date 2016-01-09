@@ -24,7 +24,19 @@ if ($db->connect_error) {
 
 $id = $_POST['id'];
 
-$sql = "SELECT * from customer where id=".$id;
+//$sql = "SELECT * from customer where id=".$id;
+$sql = "SELECT
+customer.id,
+type.id as type_id,
+type.type,
+customer.`name`,
+customer.contactinfo
+FROM
+customer ,
+type
+WHERE
+customer.type_id = type.id AND
+customer.id =".$id;
 $xml;
 foreach ($db->query($sql )as $row ){
   $xml = "<customer>";

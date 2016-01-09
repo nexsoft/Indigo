@@ -467,12 +467,14 @@
                                                                             success: function (data) {
                                                                                 // alert(data);
                                                                                 getcustomer();
+                                                                                clear();
                                                                             }
 
 
                                                                         });
 
                                                                     } else {
+                                                                        //  alert("on update "+customer_id);
                                                                         $.ajax({
                                                                             type: 'POST',
                                                                             url: "php/updatecustomer.php",
@@ -480,6 +482,9 @@
                                                                             success: function (data) {
                                                                                 alert("Data Updated!");
                                                                                 getcustomer();
+                                                                                clear();
+
+
                                                                             }
                                                                         });
 
@@ -490,13 +495,17 @@
                                                                 });
 
                                                                 $("#btnCashinoutAdd").click(function () {
+                                                                    //alert("onclick  cus id "+cashcustomerid);
                                                                     if (cashinout_idd == 0) {
+                                                                        //alert("working");
                                                                         $.ajax({
                                                                             type: 'POST',
                                                                             url: "php/setcashinout.php",
                                                                             data: {customerid: cashcustomerid, cashinouttype: $("#cashinoutPaytype").val(), amount: $("#txtCashinoutAmount").val(), description: $("#txtCashinoutDescription").val()},
                                                                             success: function (data) {
                                                                                 alert("saved!");
+                                                                                getcashinout();
+                                                                                clear();
 
                                                                             }
 
@@ -508,14 +517,17 @@
 
 
 
-                                                                    }else {
+                                                                    } else {
+                                                                        //   alert("cash id"+cashinout_idd+"   cus id "+cashcustomerid);
+                                                                        // alert("cash id"+cashinout_idd);
                                                                         $.ajax({
                                                                             type: 'POST',
                                                                             url: "php/updatecashinout.php",
-                                                                            data: {cashinout_idd:cashinout_idd , type: typeid,amount:$("#cashinoutPaytype").val(),description:$("#txtCashinoutDescription").val()},
+                                                                            data: {cashinout_idd: cashinout_idd, cusid: cashcustomerid, type: $("#cashinoutPaytype").val(), amount: $("#txtCashinoutAmount").val(), description: $("#txtCashinoutDescription").val()},
                                                                             success: function (data) {
                                                                                 alert("Data Updated!");
-                                                                               getcashinout();
+                                                                                getcashinout();
+                                                                                clear();
                                                                             }
                                                                         });
 
@@ -546,7 +558,8 @@
 
 
                                                             var customer_id = 0;
-                                                            function setid(id) {
+                                                            function setid(id, type_id) {
+                                                                // alert(id);
                                                                 $.ajax({
                                                                     type: 'POST',
                                                                     url: "php/setcustomerupdate.php",
@@ -565,38 +578,46 @@
                                                                 });
 
                                                                 customer_id = id;
+                                                                typeid = type_id;
                                                             }
 
 
 
                                                             function del(id) {
 
+                                                                var r = confirm("Are you sure want to delete?");
 
-                                                                $.ajax({
-                                                                    type: 'POST',
-                                                                    url: "php/deletecustomer.php",
-                                                                    data: {id: id},
-                                                                    success: function (data) {
-                                                                        getcustomer();
-                                                                    }
+                                                                if (r == true) {
+                                                                    $.ajax({
+                                                                        type: 'POST',
+                                                                        url: "php/deletecustomer.php",
+                                                                        data: {id: id},
+                                                                        success: function (data) {
+                                                                            alert("Delete Successfully!");
+                                                                            getcustomer();
+                                                                        }
 
-                                                                });
+                                                                    });
+
+
+                                                                }
+
 
                                                             }
 
-                                                         var cashinout_idd=0;
-                                                            function setcashid(id) {
-                                                               // alert(id);
+                                                            var cashinout_idd = 0;
+                                                            function setcashid(id, cusid) {
+                                                                // alert(id);
                                                                 $.ajax({
                                                                     type: 'POST',
                                                                     url: "php/setcashinoutupdate.php",
                                                                     dataType: 'xml',
                                                                     data: {id: id},
                                                                     success: function (xml) {
-                                                                        
-                                                                       
+
+
                                                                         $(xml).find('cashinout').each(function () {
-                                                                           
+
                                                                             $("#cashinoutCustomername").val($(this).find('name').text());
                                                                             $("#cashinoutPaytype").val($(this).find('type').text());
                                                                             $("#txtCashinoutAmount").val($(this).find('amount').text());
@@ -608,31 +629,33 @@
                                                                     }
 
 
-                                                                });
-                                                                
-                                                               cashinout_idd=id;
 
+                                                                });
+
+                                                                cashinout_idd = id;
+                                                                cashcustomerid = cusid;
 
                                                             }
 
                                                             function delcashid(id) {
-                                                               
-                                                                var r= confirm("Are you sure want to delete?");
-                                                                if(r==true){
-                                                                     $.ajax({
-                                                                    type: 'POST',
-                                                                    url: "php/deletecashinout.php",
-                                                                    data: {id: id},
-                                                                    success: function (data) {
-                                                                        getcashinout();
-                                                                    }
 
-                                                                });
-                                                                    
-                                                                    
+                                                                var r = confirm("Are you sure want to delete?");
+                                                                if (r == true) {
+                                                                    $.ajax({
+                                                                        type: 'POST',
+                                                                        url: "php/deletecashinout.php",
+                                                                        data: {id: id},
+                                                                        success: function (data) {
+                                                                            alert("Delete Successfully!");
+                                                                            getcashinout();
+                                                                        }
+
+                                                                    });
+
+
                                                                 }
-                                                                
-                                                                  
+
+
 
 
 
@@ -649,6 +672,23 @@
 
 
                                                                 });
+
+
+                                                            }
+
+                                                            function clear() {
+
+                                                                $("#txtname").val('');
+                                                                $("#type").prop('selectedIndex', 0);
+                                                                $("#txtContactInfo").val('');
+                                                                
+                                                                $("#txtCashinoutAmount").val('');
+                                                                $("#txtCashinoutDescription").val('');
+                                                                $("#cashinoutCustomername").prop('selectedIndex', 0);
+                                                                $("#cashinoutPaytype").prop('selectedIndex', 0);
+
+
+
 
 
                                                             }
@@ -729,6 +769,7 @@
                                                             var typeid = 0;
                                                             var typename = 0;
                                                             function gettypeid(id) {
+                                                                // alert(id);
                                                                 var arr = 0;
                                                                 arr = id.split(":");
 
@@ -741,13 +782,14 @@
                                                             var cashcustomerid = 0;
                                                             var cashcusname = 0;
                                                             function getcustomerid(id) {
+
                                                                 var arr = 0;
                                                                 arr = id.split(":");
 
                                                                 cashcustomerid = arr[0];
                                                                 cashcusname = arr[1];
 
-
+                                                                //alert("alert on getcustomer id function"+cashcustomerid);
                                                             }
 
                                                             var options = {
@@ -783,7 +825,7 @@
                                                             var customerid = 0;
                                                             function setcustomerid(id) {
                                                                 customerid = id;
-                                                                alert(id);
+                                                                // alert(id);
 
                                                             }
 
