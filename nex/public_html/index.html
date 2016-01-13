@@ -73,7 +73,7 @@
                                                 <td>
                                                     <div class="form-group">
 
-                                                        <input type="text" id="txtname" class="form-control" required="" /> 
+                                                        <input type="text" id="txtname" class="form-control" required /> 
                                                     </div>
 
                                                 </td>
@@ -129,7 +129,7 @@
                                                 <td>
                                                     <div class="form-group">
 
-                                                        <button type="button" id="btnAdd" class="form-control" >Submit</button> 
+                                                        <button type="button" id="btnAdd" class="form-control"  >Submit</button> 
                                                     </div>
 
                                                 </td> 
@@ -318,7 +318,7 @@
 
                             <!--/////////////////////////////////////view//////////////////////////// -->
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div id="frmview"> 
 
                                         <div class="form-group">
@@ -349,10 +349,10 @@
 
                                         </div>
 
-                                        <div class="form-group">
-
-                                            <button type="button" id="btnView" class="form-control" >View</button> 
-                                        </div>
+                                        <!--   <div class="form-group">
+   
+                                               <button type="button" id="btnView" class="form-control" >View</button> 
+                                           </div>-->
 
                                     </div>
 
@@ -362,16 +362,24 @@
                                     <table class="table table-hover" id="tblview" >
                                         <tr>
                                             <th>
-                                                Name
+                                                ID
 
                                             </th>
 
                                             <th>
-                                                Type
+                                                Date
+
+                                            </th>
+                                            <th>
+                                                Payment Type
 
                                             </th>
                                             <th>
                                                 Amount
+
+                                            </th>
+                                            <th>
+                                                Description
 
                                             </th>
 
@@ -379,6 +387,64 @@
 
 
                                     </table>
+
+                                </div>
+
+                                <div class="col-md-3" id="tbltotal">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    Total Credit:
+                                                </div>
+
+                                            </td>
+
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="text" id="txttotalcredit" class="form-control" required /> 
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    Total Debit:
+                                                </div>
+
+                                            </td>
+
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="text" id="txttotaldebit" class="form-control" required /> 
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    Balance:
+                                                </div>
+
+                                            </td>
+
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="text" id="txtbalance" class="form-control" required /> 
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                    </table>
+
 
                                 </div>
 
@@ -456,10 +522,15 @@
                                                                 $("#tblcashinout").hide();
                                                                 $("#frmview").hide();
                                                                 $("#tblview").hide();
+                                                                $("#tbltotal").hide();
+
 
                                                                 $("#btnAdd").click(function () {
 
                                                                     if (customer_id == 0) {
+
+
+
                                                                         $.ajax({
                                                                             type: 'POST',
                                                                             url: "php/setcustomer.php",
@@ -681,7 +752,7 @@
                                                                 $("#txtname").val('');
                                                                 $("#type").prop('selectedIndex', 0);
                                                                 $("#txtContactInfo").val('');
-                                                                
+
                                                                 $("#txtCashinoutAmount").val('');
                                                                 $("#txtCashinoutDescription").val('');
                                                                 $("#cashinoutCustomername").prop('selectedIndex', 0);
@@ -761,6 +832,8 @@
                                                                 $("#cashinout").slideUp(1000);
                                                                 $("#frmview").slideDown();
                                                                 $("#tblview").slideDown();
+                                                                $("#tbltotal").slideDown();
+
 
 
 
@@ -824,9 +897,71 @@
 
                                                             var customerid = 0;
                                                             function setcustomerid(id) {
-                                                                customerid = id;
-                                                                // alert(id);
 
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: "php/viewcashinout.php",
+                                                                    data: {id: id},
+                                                                    success: function (data) {
+                                                                        $("#tblview").html(data);
+
+                                                                    }
+
+                                                                });
+
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: "php/viewtotalbalance.php",
+                                                                // data: JSON.stringify({id: id}),
+                                                                data: {id: id},
+                                                                   // dataType: 'json',
+                                                                    success: function (data) {
+                                                                        
+                                                                        var spl= data.split(":");
+                                                                        alert(spl[0]);
+                                                                        if(spl[0]==='0' && spl[1]==='0'){
+                                                                         
+                                                                             $("#txtbalance").val(0);
+                                                                             $("#txttotalcredit").val(spl[0]);
+                                                                             $("#txttotaldebit").val(spl[1]);
+                                                                            
+                                                                        }else if(spl[0]==='0' && spl[1]!='0'){
+                                                                             $("#txtbalance").val(spl[1]);
+                                                                            $("#txttotalcredit").val(spl[0]);
+                                                                             $("#txttotaldebit").val(spl[1]);
+                                                                            
+                                                                        }else if(spl[1]==='0' && spl[0]!='0') {
+                                                                             $("#txtbalance").val("-"+ spl[0]);
+                                                                            $("#txttotalcredit").val(spl[0]);
+                                                                             $("#txttotaldebit").val(spl[1]);
+                                                                            
+                                                                        }else{
+                                                                            $("#txtbalance").val(spl[2]);
+                                                                             $("#txttotalcredit").val(spl[0]);
+                                                                             $("#txttotaldebit").val(spl[1]);
+                                                                            
+                                                                        }
+                                                                      
+                                                                       
+
+
+                                                                    }
+
+                                                                });
+
+
+
+
+
+
+                                                            }
+
+                                                            function validatecustomer() {
+                                                                var x = document.forms["frmCustomerReg"]["txtname"].value;
+                                                                if (x == null || x == "") {
+                                                                    alert("Name must be filled out");
+                                                                    return false;
+                                                                }
                                                             }
 
         </script>
