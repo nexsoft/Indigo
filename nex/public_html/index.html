@@ -60,7 +60,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div id="frmCustomerReg"> 
+                                    <div id="frmCustomerReg" > 
                                         <table>
                                             <tr>
                                                 <td>
@@ -71,9 +71,13 @@
                                                 </td>
 
                                                 <td>
-                                                    <div class="form-group">
+                                                    <div class="form-group" >
+                                                        
+                                                            
+                                                        <input type="text" id="txtname" class="form-control" placeholder="Enter Name" required /> 
+                                                       
 
-                                                        <input type="text" id="txtname" class="form-control" required /> 
+                                                       
                                                     </div>
 
                                                 </td>
@@ -111,7 +115,7 @@
                                                 <td>
                                                     <div class="form-group">
 
-                                                        <input type="text" id="txtContactInfo" class="form-control" required="" /> 
+                                                        <input type="text" id="txtContactInfo" class="form-control" placeholder="Enter Mobile No" required /> 
                                                     </div>
 
                                                 </td>
@@ -527,22 +531,30 @@
 
                                                                 $("#btnAdd").click(function () {
 
+                                                                   
+
                                                                     if (customer_id == 0) {
+                                                                        var contact = $("#txtContactInfo").val();
+                                                                    // alert(checkalreadyexistname(contact));
+                                                                       
+                                                                             $.ajax({
+                                                                                type: 'POST',
+                                                                                url: "php/setcustomer.php",
+                                                                                data: {typeid: typeid, name: $("#txtname").val(), type: typename, contactinfo: $("#txtContactInfo").val()},
+                                                                                success: function (data) {
+                                                                                    // alert(data);
+                                                                                    getcustomer();
+                                                                                    clear();
+                                                                                }
+
+
+                                                                            });
+                                                                            
+                                                                        
 
 
 
-                                                                        $.ajax({
-                                                                            type: 'POST',
-                                                                            url: "php/setcustomer.php",
-                                                                            data: {typeid: typeid, name: $("#txtname").val(), type: typename, contactinfo: $("#txtContactInfo").val()},
-                                                                            success: function (data) {
-                                                                                // alert(data);
-                                                                                getcustomer();
-                                                                                clear();
-                                                                            }
 
-
-                                                                        });
 
                                                                     } else {
                                                                         //  alert("on update "+customer_id);
@@ -912,37 +924,37 @@
                                                                 $.ajax({
                                                                     type: 'POST',
                                                                     url: "php/viewtotalbalance.php",
-                                                                // data: JSON.stringify({id: id}),
-                                                                data: {id: id},
-                                                                   // dataType: 'json',
+                                                                    // data: JSON.stringify({id: id}),
+                                                                    data: {id: id},
+                                                                    // dataType: 'json',
                                                                     success: function (data) {
-                                                                        
-                                                                        var spl= data.split(":");
-                                                                        alert(spl[0]);
-                                                                        if(spl[0]==='0' && spl[1]==='0'){
-                                                                         
-                                                                             $("#txtbalance").val(0);
-                                                                             $("#txttotalcredit").val(spl[0]);
-                                                                             $("#txttotaldebit").val(spl[1]);
-                                                                            
-                                                                        }else if(spl[0]==='0' && spl[1]!='0'){
-                                                                             $("#txtbalance").val(spl[1]);
+
+                                                                        var spl = data.split(":");
+                                                                    //    alert(spl[0]);
+                                                                        if (spl[0] === '0' && spl[1] === '0') {
+
+                                                                            $("#txtbalance").val(0);
                                                                             $("#txttotalcredit").val(spl[0]);
-                                                                             $("#txttotaldebit").val(spl[1]);
-                                                                            
-                                                                        }else if(spl[1]==='0' && spl[0]!='0') {
-                                                                             $("#txtbalance").val("-"+ spl[0]);
+                                                                            $("#txttotaldebit").val(spl[1]);
+
+                                                                        } else if (spl[0] === '0' && spl[1] != '0') {
+                                                                            $("#txtbalance").val(spl[1]);
                                                                             $("#txttotalcredit").val(spl[0]);
-                                                                             $("#txttotaldebit").val(spl[1]);
-                                                                            
-                                                                        }else{
+                                                                            $("#txttotaldebit").val(spl[1]);
+
+                                                                        } else if (spl[1] === '0' && spl[0] != '0') {
+                                                                            $("#txtbalance").val("-" + spl[0]);
+                                                                            $("#txttotalcredit").val(spl[0]);
+                                                                            $("#txttotaldebit").val(spl[1]);
+
+                                                                        } else {
                                                                             $("#txtbalance").val(spl[2]);
-                                                                             $("#txttotalcredit").val(spl[0]);
-                                                                             $("#txttotaldebit").val(spl[1]);
-                                                                            
+                                                                            $("#txttotalcredit").val(spl[0]);
+                                                                            $("#txttotaldebit").val(spl[1]);
+
                                                                         }
-                                                                      
-                                                                       
+
+
 
 
                                                                     }
