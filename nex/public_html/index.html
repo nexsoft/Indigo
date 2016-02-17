@@ -1279,18 +1279,19 @@
                                                                             // alert("cash id"+cashinout_idd);
                                                                             $.ajax({
                                                                                 type: 'POST',
-                                                                                url: "php/updatecashinout.php",
+                                                                                url: "php/updateaccounts.php",
                                                                                 data: {
-                                                                                    cashinout_idd: cashinout_idd,
-                                                                                    cusid: cashcustomerid,
-                                                                                    type: $("#cashinoutPaytype").val(),
-                                                                                    amount: $("#txtCashinoutAmount").val(),
-                                                                                    description: $("#txtCashinoutDescription").val(),
-                                                                                    openingbalance: $("#txtcashOpeningBalance").val()
+                                                                                    account_id: account_id,
+                                                                                   
+                                                                                    account_name: $("#txtAccountname").val(),
+                                                                                    account_type: $("#cmbBankPaytype").val(),
+                                                                                    opening_balance: $("#txtBankOpeningBalance").val(),
+                                                                                    amount: $("#txtBankAmount").val(),
+                                                                                    description: $("#txtBankDescription").val()
                                                                                 },
                                                                                 success: function (data) {
                                                                                     alert("Data Updated!");
-                                                                                    getcashinout();
+                                                                                    getBankDetails();
                                                                                     clear();
                                                                                 }
                                                                             });
@@ -1402,9 +1403,30 @@
                                                                     
                                                                     
                                                                     function setBankId(id){
+                                                                        $.ajax({
+                                                                            
+                                                                            type: 'POST',
+                                                                            url: "php/setbankupdate.php",
+                                                                            dataType: 'xml',
+                                                                            data: {id:id},
+                                                                            success: function (xml) {
+                                                                            $(xml).find('bank').each(function () {
+
+                                                                                    $("#txtAccountname").val($(this).find('account_name').text());
+                                                                                    $("#cmbBankPaytype").val($(this).find('account_type').text());
+                                                                                    $("#txtBankOpeningBalance").val($(this).find('opening_balance').text());
+                                                                                    $("#txtBankAmount").val($(this).find('amount').text());
+                                                                                    $("#txtBankDescription").val($(this).find('description').text());
+
+
+
+                                                                                });
+    
+                                                                            }
+                                                                            
+                                                                        });
                                                                         
-                                                                        
-                                                                        
+                                                                        account_id=id;
                                                                         
                                                                     }
 
