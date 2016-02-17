@@ -10,7 +10,9 @@ cashinout.id,
 cashinout.paymentype,
 cashinout.amount,
 customer.`name`,
-cashinout.customer_id
+cashinout.customer_id,
+cashinout.openingbalance
+
 FROM
 cashinout ,
 customer

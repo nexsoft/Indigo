@@ -13,7 +13,9 @@ customer.`id` as cusid,
 customer.`name`,
 cashinout.paymentype,
 cashinout.amount,
-cashinout.description
+cashinout.description,
+cashinout.openingbalance
+
 FROM
 cashinout
 INNER JOIN customer ON cashinout.customer_id = customer.id
@@ -26,6 +28,8 @@ foreach ($db->query($sql )as $row ){
   $xml .= "<type>".$row['paymentype']."</type>";
   $xml .= "<amount>".$row['amount']."</amount>";
   $xml .= "<description>".$row['description']."</description>";
+  $xml .= "<openingbalance>".$row['openingbalance']."</openingbalance>";
+  
   $xml .= "</cashinout>";
     
 }

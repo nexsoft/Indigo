@@ -7,7 +7,8 @@ $amount = $_POST['amount'];
 $description = $_POST['description'];
 $id=$_POST['cashinout_idd'];
 $cusid=$_POST['cusid'];
-$sql = "UPDATE  cashinout SET customer_id=$cusid,paymentype='$type' ,amount=$amount,description='$description' where id=$id";
+$openingbalance=$_POST['openingbalance'];
+$sql = "UPDATE  cashinout SET customer_id=$cusid,paymentype='$type' ,amount=$amount,description='$description',openingbalance=$openingbalance where id=$id";
 echo $sql;
 if (!mysqli_query($db, $sql)) {
     die('Query failed ERROR: ' . mysqli_error($db));

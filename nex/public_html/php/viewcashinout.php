@@ -12,7 +12,9 @@ customer.`name`,
 cashinout.paymentype,
 cashinout.amount,
 cashinout.description,
-cashinout.date
+cashinout.date,
+cashinout.openingbalance
+
 FROM
 cashinout ,
 customer
